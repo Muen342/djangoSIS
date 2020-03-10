@@ -1,5 +1,12 @@
+<h>User ID</h>
+<p>{{ student.id }}</p>
+<h>First name</h>
+<p>{{ student.name }}</p>
+<h>Last name</h>
+<p>{{ student.surname }}</p>
 <h>Locker ID</h>
 <p>{{ student.locker_id }}</p>
 <h>Grade</h>
 <p>{{ student.grade }}</p>
+<a href="{% url 'SIS:studentCourses' student.id %}"> Courses </a>
 <a href="{% url 'SIS:editStudent' student.id %}"> Edit Student</a>

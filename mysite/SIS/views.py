@@ -86,6 +86,19 @@ def addStudentConfirm(request):
                 return render(request, 'students/addStudent.html', {
                 'error_message': "The locker doesn't exist, please create one first",
                 })
+def studentCourses(request, student_id):
+    # course_list = Courses.objects.raw("Select * from SIS_courses where students like '%" + str(student_id) + "%'")
+    course_list = Courses.objects.all()
+    return render(request, 'students/studentCourses.html', {'course_list': course_list, 'student_id': student_id})
+
+def studentCourseDetail(request, student_id, course_id):
+    try:
+        course = Courses.objects.get(pk=course_id)
+        
+    except Student.DoesNotExist:
+        raise Http404("Course does not exist")
+    else:
+        return render(request, 'students/studentCourseDetail.html', {'student_id':student_id, 'course': course})
                 
 def coursesIndex(request):
     courses_list = Courses.objects.all()

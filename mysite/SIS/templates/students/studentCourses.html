@@ -1,0 +1,12 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% if course_list %}
+<ul>
+    {% for course in course_list %}
+    <li><a href="{% url 'SIS:studentCourseDetail' student_id course.id %}">{{course.title}} {{ course.code }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Courses are available.</p>
+{% endif %}
