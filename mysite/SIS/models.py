@@ -22,7 +22,7 @@ class Teacher(models.Model):
     department = models.CharField(max_length=50)
 
 class Courses(models.Model):
-    id = models.CharField(primary_key = True, max_length=6)
+    code = models.CharField(max_length=30, default='')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     credit = models.DecimalField(default=0, decimal_places=2, max_digits=3)
