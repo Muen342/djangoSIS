@@ -1,13 +1,22 @@
 <h2>Attendance</h2>
 
+<p>
+    A - Absent
+    P - Present
+    E - Excused
+</p>
+
 <p>{{ course.title }}</p>
 
 {% if student_list %}
-<ul>
+<form action="{% url 'SIS:confirmAttendance' course.id %}" method="post">
+    {% csrf_token %}
     {% for student in student_list %}
-    <li>{{ student.name }} {{ student.surname }}</li>
+        <label for="{{ student.id }}">{{ student.name }} {{ student.surname }}</label><br>
+        <input type="text" id="{{ student.id }}" name="{{ student.id }}" value="P"><br>
     {% endfor %}
-</ul>
+    <input type="submit" value="Submit">
+</form>
 {% else %}
 <p>No students are available.</p>
 {% endif %}

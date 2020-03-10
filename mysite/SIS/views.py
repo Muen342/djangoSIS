@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from .models import Student, Locker, Teacher, Courses, Assignment, Marks, Attendance
 from django.views import generic
+import datetime
 
 def index(request):
     return render(request, 'homepage/index.html',context=None)
@@ -139,3 +140,19 @@ def attendance(request, courses_id):
         'course': course,
         'student_list': student_list,
     })
+
+def confirmAttendance(request, courses_id):
+    try:
+        course = Courses.objects.get(pk=courses_id)
+    except Courses.DoesNotExist:
+        raise Http404("Course does not exist")
+    students = course.students.split(", ")
+    for stud in students:
+        att = Attendance.objects.filter(course_id=courses_id, student_id=stud, date__gte=datetime.date.today())
+        if att: 
+            if att[0].attendance != request.POST[stud]:
+                att[0].attendance = request.POST[stud]
+        else:
+            a = Attendance(attendance=request.POST[stud], course_id=courses_id, student_id=stud)
+            a.save()
+    return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
