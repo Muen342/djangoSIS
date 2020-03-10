@@ -1,6 +1,6 @@
 <h2>Edit {{ student.name }} {{ student.surname }}</h2>
 
-<form action="{% url 'students:confirmStudent' student.id %}" method="post">
+<form action="{% url 'SIS:confirmStudent' student.id %}" method="post">
     {% csrf_token %}
     <label for="id">Student number:</label><br>
     <input type="text" id="id" name="id" value={{ student.id }}><br>

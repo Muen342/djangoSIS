@@ -43,4 +43,4 @@ def confirmStudent(request, student_id):
             d.delete()
             s = Student(id=request.POST['id'], grade=request.POST['grade'], name=request.POST['fname'], surname=request.POST['lname'],locker_id=student.locker_id)
             s.save()
-            return HttpResponseRedirect(reverse('students:detail', args=(request.POST['id'],)))
+            return HttpResponseRedirect(reverse('SIS:detail', args=(request.POST['id'],)))
