@@ -9,4 +9,8 @@
 <h>Grade</h>
 <p>{{ student.grade }}</p>
 <a href="{% url 'SIS:studentCourses' student.id %}"> Courses </a>
+<br>
 <a href="{% url 'SIS:editStudent' student.id %}"> Edit Student</a>
+<br>
+<br>
+<a href="{% url 'SIS:listStudents' %}">Back</a>

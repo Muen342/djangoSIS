@@ -1,0 +1,14 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% if locker_list %}
+<ul>
+    {% for locker in locker_list %}
+    <li><a href="{% url 'SIS:lockerDetail' locker.id %}">id: {{ locker.id }} location: {{ locker.location }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Lockers are available.</p>
+{% endif %}
+<br>
+<a href="{% url 'SIS:lockerIndex' %}">Back</a>

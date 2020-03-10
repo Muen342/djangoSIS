@@ -1,12 +1,20 @@
-<h>{{course.title}}</h>
+<h>Title: {{course.title}}</h>
 <br>
-<p>{{ teacher.name }} {{ teacher.surname }}</p>
+<p>Instructor: {{ teacher.name }} {{ teacher.surname }}</p>
+<p>Description: {{course.description}}</p>
+
+{% if assignment_list %}
+<p>Assignments</p>
+<ul>
+    {% for assignment in assignment_list %}
+    <li>{{assignment.title}} {{ assignment.category }}</li>
+    <p>Out of: {{assignment.outof}}</p>
+    <p>Mark: {{assignment.mark}}</p>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Assignments are available.</p>
+{% endif %}
+
 <br>
-<h>First name</h>
-<p>{{ student.name }}</p>
-<h>Last name</h>
-<p>{{ student.surname }}</p>
-<h>Locker ID</h>
-<p>{{ student.locker_id }}</p>
-<h>Grade</h>
-<p>{{ student.grade }}</p>
+<a href="{% url 'SIS:studentCourses' student_id %}">Back</a>
