@@ -45,7 +45,7 @@ class Marks(models.Model):
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE)
-    date = models.DateField(default = datetime.date.today)
+    date = models.DateField(default = datetime.datetime.today)
 
     ATTENDANCE_STATUS = (
         ('A', 'Attendance'),
