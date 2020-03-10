@@ -86,18 +86,22 @@ def addStudentConfirm(request):
                 'error_message': "The locker doesn't exist, please create one first",
                 })
 def studentCourses(request, student_id):
-    # course_list = Courses.objects.raw("Select * from SIS_courses where students like '%" + str(student_id) + "%'")
-    course_list = Courses.objects.all()
+    course_list = Courses.objects.filter(students__contains=str(student_id))
+    #course_list = Courses.objects.all()
     return render(request, 'students/studentCourses.html', {'course_list': course_list, 'student_id': student_id})
 
 def studentCourseDetail(request, student_id, course_id):
     try:
         course = Courses.objects.get(pk=course_id)
-        
+        teacher = Teacher.objects.get(pk=course.teacher_id)
+        assignment_list = Assignment.objects.raw("Select * from sis_assignment where course_id = '" + str(course_id) + "';")
+        for assignment in assignment_list:
+            mark = Marks.objects.raw("Select * from sis_marks where student_id = '" + str(student_id) + "' and assignment_id = '" + str(assignment.id) + "' and id > 0;")
+            assignment.mark = mark[0].mark
     except Student.DoesNotExist:
         raise Http404("Course does not exist")
     else:
-        return render(request, 'students/studentCourseDetail.html', {'student_id':student_id, 'course': course})
+        return render(request, 'students/studentCourseDetail.html', {'student_id':student_id, 'course': course, 'teacher':teacher, 'assignment_list':assignment_list})
                 
 def coursesIndex(request):
     courses_list = Courses.objects.all()
@@ -139,3 +143,52 @@ def attendance(request, courses_id):
         'course': course,
         'student_list': student_list,
     })
+
+def lockerIndex(request):
+    locker_list = Locker.objects.all()
+    template = loader.get_template('Locker/index.html')
+    context = {
+        'locker_list': locker_list,
+    }
+    return HttpResponse(template.render(context, request))
+
+def lockerDetail(request, locker_id):
+    template = loader.get_template('Locker/detail.html')
+    return HttpResponse(template.render(request))
+
+def addLocker(request):
+    template = loader.get_template('Locker/addLocker.html')
+    return HttpResponse(template.render(request))
+
+def listLocker(request):
+    locker_list = Locker.objects.all()
+    template = loader.get_template('Locker/lockerList.html')
+    context = {
+        'locker_list': locker_list,
+    }
+    return HttpResponse(template.render(context, request))
+
+def editLocker(request, locker_id):
+    try:
+        locker = Locker.objects.get(pk=locker_id)
+    except Locker.DoesNotExist:
+        raise Http404("Locker does not exist")
+    return render(request, 'students/editLocker.html', {'locker': locker})
+
+def confirmLocker(request, locker_id):
+    try:
+        locker = Locker.objects.get(pk=locker_id)
+    except Locker.DoesNotExist:
+        raise Http404("Student does not exist")
+    else:
+        if(request.POST['id'] == '' or request.POST['location'] == '' or request.POST['combination'] == '' or request.POST['active'] == ''):
+            return render(request, 'students/editStudent.html', {
+            'locker': locker,
+            'error_message': "One of your fields are empty",
+            })
+        else:
+            d = Locker.objects.get(pk=locker.id)
+            d.delete()
+            s = Locker(id=request.POST['id'], location=request.POST['location'], combination=request.POST['combination'], active=request.POST['active'])
+            s.save()
+            return HttpResponseRedirect(reverse('SIS:lockerDetail', args=(request.POST['id'],)))

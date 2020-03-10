@@ -1,0 +1,19 @@
+<h2>Edit locker id {{locker.id}}</h2>
+
+<form action="{% url 'SIS:confirmLocker' locker.id %}" method="post">
+    {% csrf_token %}
+    <label for="id">Locker ID:</label><br>
+    <input type="text" id="id" name="id" value={{ locker.id }}><br>
+    <label for="location">Location:</label><br>
+    <input type="text" id="location" name="location" value={{ locker.location }}><br>
+    <label for="combination">Combination:</label><br>
+    <input type="text" id="combination" name="combination" value={{ locker.combination }}><br>
+    <label for="active">Active:</label><br>
+    <input type="text" id="active" name="active" value={{ locker.active }}><br><br>
+    <input type="submit" value="Submit">
+</form>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
+<br>
+<a href="{% url 'SIS:lockerDetail' locker.id %}">Back</a>

@@ -18,4 +18,9 @@ urlpatterns = [
     path('courses/list/', views.listCourses, name='listCourses'),
     path('courses/<int:courses_id>/', views.courseDetail, name='courseDetail'),
     path('courses/<int:courses_id>/attendance', views.attendance, name='attendance'),
+    path('locker/', views.lockerIndex, name='lockerIndex'),
+    path('locker/add/', views.addLocker, name='addLocker'),
+    path('locker/list/', views.listLocker, name='listLocker'),
+    path('locker/<int:locker_id>', views.lockerDetail, name='lockerDetail'),
+    path('locker/list/<int:locker_id>/edit', views.editLocker, name='editLocker'),
 ]

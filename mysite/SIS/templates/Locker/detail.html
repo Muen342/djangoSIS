@@ -1,0 +1,12 @@
+<h>Locker ID</h>
+<p>{{ locker.id }}</p>
+<h>Location</h>
+<p>{{ locker.location }}</p>
+<h>Combination</h>
+<p>{{ locker.combination }}</p>
+<h>Active</h>
+<p>{{ locker.active }}</p>
+<a href="{% url 'SIS:editLocker' locker.id %}"> Edit Student</a>
+<br>
+<br>
+<a href="{% url 'SIS:listLocker' %}">Back</a>
