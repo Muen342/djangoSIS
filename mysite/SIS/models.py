@@ -1,6 +1,7 @@
 # Create your models here.
 from django.db import models
 from django.utils import timezone
+import datetime
 
 class Locker(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -40,3 +41,22 @@ class Marks(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     mark = models.IntegerField(default=0)
+
+class Attendance(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE)
+    date = models.DateField(default = datetime.date.today)
+
+    ATTENDANCE_STATUS = (
+        ('A', 'Attendance'),
+        ('P', 'Present'),
+        ('E', 'Excused'),
+    )
+
+    attendance = models.CharField(
+        max_length=1,
+        choices=ATTENDANCE_STATUS,
+        blank=True,
+        default='P',
+        help_text='Attendance',
+    )

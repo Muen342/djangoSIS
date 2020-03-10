@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.template import loader
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from .models import Student, Locker, Teacher, Courses, Assignment, Marks
+from .models import Student, Locker, Teacher, Courses, Assignment, Marks, Attendance
 from django.views import generic
+
+def index(request):
+    return render(request, 'homepage/index.html',context=None)
 
 def studentIndex(request):
     student_list = Student.objects.all()
@@ -13,8 +16,6 @@ def studentIndex(request):
         'student_list': student_list,
     }
     return HttpResponse(template.render(context, request))
-def index(request):
-    return render(request, 'homepage/index.html',context=None)
 
 def addStudent(request):
     return render(request, 'students/addStudent.html',context=None)
@@ -97,3 +98,44 @@ def studentCourseDetail(request, student_id, course_id):
         raise Http404("Course does not exist")
     else:
         return render(request, 'students/studentCourseDetail.html', {'student_id':student_id, 'course': course})
+                
+def coursesIndex(request):
+    courses_list = Courses.objects.all()
+    template = loader.get_template('courses/index.html')
+    context = {
+        'courses_list': courses_list,
+    }
+    return HttpResponse(template.render(context, request))
+
+def listCourses(request):
+    courses_list = Courses.objects.all()
+    template = loader.get_template('courses/listCourses.html')
+    context = {
+        'courses_list': courses_list,
+    }
+    return HttpResponse(template.render(context, request))
+
+def courseDetail(request, courses_id):
+    try:
+        course = Courses.objects.get(pk=courses_id)
+    except Courses.DoesNotExist:
+        raise Http404("Course does not exist")
+    return render(request, 'courses/courseDetail.html', {'course': course})
+
+def attendance(request, courses_id):
+    try:
+        course = Courses.objects.get(pk=courses_id)
+    except Courses.DoesNotExist:
+        raise Http404("Course does not exist")
+    students = course.students.split(", ")
+    student_list = []
+    for stud in students:
+        try:
+            s = Student.objects.get(pk=int(stud))
+        except Student.DoesNotExist:
+            raise Http404("Student does not exist")
+        student_list.append(s)
+    return render(request, 'courses/attendance.html', {
+        'course': course,
+        'student_list': student_list,
+    })

@@ -1,0 +1,13 @@
+<h2>Attendance</h2>
+
+<p>{{ course.title }}</p>
+
+{% if student_list %}
+<ul>
+    {% for student in student_list %}
+    <li>{{ student.name }} {{ student.surname }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No students are available.</p>
+{% endif %}
