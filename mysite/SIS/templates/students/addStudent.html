@@ -1,0 +1,18 @@
+<h2>Add a new Student</h2>
+<form action="{% url 'SIS:addStudentConfirm' %}" method="post">
+    {% csrf_token %}
+    <label for="id">Student number:</label><br>
+    <input type="text" id="id" name="id" value=""><br>
+    <label for="grade">Grade:</label><br>
+    <input type="text" id="grade" name="grade" value=""><br>
+    <label for="locker">Locker:</label><br>
+    <input type="text" id="locker" name="locker" value=""><br>
+    <label for="fname">First name:</label><br>
+    <input type="text" id="fname" name="fname" value=""><br>
+    <label for="lname">Last name:</label><br>
+    <input type="text" id="lname" name="lname" value=""><br><br>
+    <input type="submit" value="Submit">
+</form>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}

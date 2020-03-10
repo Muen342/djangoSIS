@@ -1,0 +1,12 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% if student_list %}
+<ul>
+    {% for student in student_list %}
+    <li><a href="{% url 'SIS:detail' student.id %}">{{ student.name }} {{ student.surname }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Students are available.</p>
+{% endif %}

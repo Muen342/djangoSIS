@@ -5,7 +5,11 @@ from . import views
 app_name = 'SIS'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('<int:student_id>/', views.detail, name='detail'),
-    path('<int:student_id>/edit', views.editStudent, name='editStudent'),
-    path('<int:student_id>/confirmStudent/', views.confirmStudent, name='confirmStudent'),
+    path('students/', views.studentIndex, name='studentIndex'),
+    path('students/list/<int:student_id>/', views.detail, name='detail'),
+    path('students/list/<int:student_id>/edit', views.editStudent, name='editStudent'),
+    path('students/list/<int:student_id>/confirmStudent/', views.confirmStudent, name='confirmStudent'),
+    path('students/add/', views.addStudent, name='addStudent'),
+    path('students/list/', views.listStudents, name='listStudents'),
+    path('students/add/confirm', views.addStudentConfirm, name='addStudentConfirm'),
 ]
