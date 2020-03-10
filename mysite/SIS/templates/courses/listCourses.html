@@ -1,0 +1,11 @@
+<h1>Courses</h1>
+
+{% if courses_list %}
+<ul>
+    {% for course in courses_list %}
+        <li><a href="{% url 'SIS:courseDetail' course.id %}">{{ course.title }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No courses created yet.</p>
+{% endif %}
