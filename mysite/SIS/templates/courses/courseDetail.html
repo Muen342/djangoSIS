@@ -3,6 +3,9 @@
 <b>Teacher: </b>{{ course.teacher.name }} {{ course.teacher.surname }}<br>
 
 <br>
+<a href="{% url 'SIS:classList' course.id %}">Class List</a>
+
+<br>
 <a href="{% url 'SIS:attendance' course.id %}">Edit Attendance</a><br>
 <a href="{% url 'SIS:viewAttendance' course.id %}">View Attendance</a>
 

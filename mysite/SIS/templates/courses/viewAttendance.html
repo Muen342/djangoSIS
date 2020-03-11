@@ -19,7 +19,10 @@
         </tr>
     {% endfor %}
 </table>
+
+{% else %}
+<p>No students in this class!</p>
 {% endif %}
 
-<br><br>
+<br>
 <a href="{% url 'SIS:courseDetail' course.id %}">Back</a>

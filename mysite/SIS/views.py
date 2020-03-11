@@ -146,11 +146,12 @@ def attendance(request, courses_id):
     students = course.students.split(", ")
     student_list = []
     for stud in students:
-        try:
-            s = Student.objects.get(pk=int(stud[1:-1]))
-        except Student.DoesNotExist:
-            raise Http404("Student does not exist")
-        student_list.append(s)
+        if stud != '':
+            try:
+                s = Student.objects.get(pk=int(stud[1:-1]))
+            except Student.DoesNotExist:
+                raise Http404("Student does not exist")
+            student_list.append(s)
     return render(request, 'courses/attendance.html', {
         'course': course,
         'student_list': student_list,
@@ -184,14 +185,16 @@ def viewAttendance(request, courses_id):
     attendance_list = []
     date_list = []
     for stud in students:
-        try:
-            s = Student.objects.get(pk=int(stud[1:-1]))
-        except Student.DoesNotExist:
-            raise Http404("Student does not exist")
-        attendance_list.append({'id': s.id, 'name': s.surname + ", " + s.name})
+        if stud != '':
+            try:
+                s = Student.objects.get(pk=int(stud[1:-1]))
+            except Student.DoesNotExist:
+                raise Http404("Student does not exist")
+            attendance_list.append({'id': s.id, 'name': s.surname + ", " + s.name})
     
-    if att:
-        date_list = att.values('date').order_by('date').distinct()
+    if attendance_list:
+        if att:
+            date_list = att.values('date').order_by('date').distinct()
 
     if date_list:
         for stud in attendance_list:
@@ -267,6 +270,25 @@ def addCourseConfirm(request):
     course.save()
     
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(course.id,)))
+
+def classList(request, courses_id):
+    try:
+        course = Courses.objects.get(pk=courses_id)
+    except Courses.DoesNotExist:
+        raise Http404("Course does not exist")
+    students = course.students.split(", ")
+    student_list = []
+    for stud in students:
+        if stud != '':
+            try:
+                s = Student.objects.get(pk=int(stud[1:-1]))
+            except Student.DoesNotExist:
+                raise Http404("Student does not exist")
+            student_list.append(s)
+    return render(request, 'courses/classList.html', {
+        'course': course,
+        'student_list': student_list,
+    })
 
 # Locker views
 def lockerIndex(request):

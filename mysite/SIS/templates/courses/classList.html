@@ -1,0 +1,14 @@
+<h2>Class List</h2>
+
+{% if student_list %}
+    <ul>
+        {% for student in student_list %}
+            <li><a href="{% url 'SIS:detail' student.id %}">{{ student.surname}}, {{ student.name}}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No students in this class yet!</p>
+{% endif %}
+
+<br>
+<a href="{% url 'SIS:courseDetail' course.id %}">Back</a>
