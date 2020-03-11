@@ -21,7 +21,8 @@ def studentIndex(request):
     return HttpResponse(template.render(context, request))
 
 def addStudent(request):
-    return render(request, 'students/addStudent.html',context=None)
+    locker_list = Locker.objects.all()
+    return render(request, 'students/addStudent.html',{'locker_list':locker_list})
 
 def listStudents(request):
     student_list = Student.objects.all()
@@ -39,11 +40,13 @@ def detail(request, student_id):
     return render(request, 'students/detail.html', {'student': student})
 
 def editStudent(request, student_id):
+    locker_list = Locker.objects.all()
     try:
         student = Student.objects.get(pk=student_id)
+        currlock = Locker.objects.get(pk=student.locker_id)
     except Student.DoesNotExist:
         raise Http404("Student does not exist")
-    return render(request, 'students/editStudent.html', {'student': student})
+    return render(request, 'students/editStudent.html', {'student': student, 'currlock': currlock,'locker_list': locker_list})
 
 def confirmStudent(request, student_id):
     try:
@@ -60,13 +63,14 @@ def confirmStudent(request, student_id):
             if(student.id != request.POST['id']):
                 d = Student.objects.get(pk=student.id)
                 d.delete()
-                s = Student(id=request.POST['id'], grade=request.POST['grade'], name=request.POST['fname'], surname=request.POST['lname'],locker_id=student.locker_id)
+                s = Student(id=request.POST['id'], grade=request.POST['grade'], name=request.POST['fname'], surname=request.POST['lname'],locker_id=request.POST['locker'])
                 s.save()
             else:
                 s = Student.objects.get(pk=student.id)
                 s.grade = request.POST['grade']
                 s.name = request.POST['fname']
                 s.surname = request.POST['lname']
+                s.locker_id = request.POST['locker']
                 s.save()
             return HttpResponseRedirect(reverse('SIS:detail', args=(request.POST['id'],)))
 

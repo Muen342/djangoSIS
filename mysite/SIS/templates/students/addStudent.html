@@ -5,8 +5,13 @@
     <input type="text" id="id" name="id" value=""><br>
     <label for="grade">Grade:</label><br>
     <input type="text" id="grade" name="grade" value=""><br>
-    <label for="locker">Locker:</label><br>
-    <input type="text" id="locker" name="locker" value=""><br>
+    <label for="locker">Locker:</label>
+    <select id="locker" name="locker">
+        {% for locker in locker_list %}
+        <option value={{locker.id}}>{{locker.id}}</option>
+        {% endfor %}
+    </select>
+    <br>
     <label for="fname">First name:</label><br>
     <input type="text" id="fname" name="fname" value=""><br>
     <label for="lname">Last name:</label><br>
