@@ -56,10 +56,17 @@ def confirmStudent(request, student_id):
             'error_message': "One of your fields are empty",
             })
         else:
-            d = Student.objects.get(pk=student.id)
-            d.delete()
-            s = Student(id=request.POST['id'], grade=request.POST['grade'], name=request.POST['fname'], surname=request.POST['lname'],locker_id=student.locker_id)
-            s.save()
+            if(student.id != request.POST['id']):
+                d = Student.objects.get(pk=student.id)
+                d.delete()
+                s = Student(id=request.POST['id'], grade=request.POST['grade'], name=request.POST['fname'], surname=request.POST['lname'],locker_id=student.locker_id)
+                s.save()
+            else:
+                s = Student.objects.get(pk=student.id)
+                s.grade = request.POST['grade']
+                s.name = request.POST['fname']
+                s.surname = request.POST['lname']
+                s.save()
             return HttpResponseRedirect(reverse('SIS:detail', args=(request.POST['id'],)))
 
 def addStudentConfirm(request):
@@ -244,10 +251,17 @@ def confirmLocker(request, locker_id):
             'error_message': "One of your fields are empty",
             })
         else:
-            d = Locker.objects.get(pk=locker.id)
-            d.delete()
-            s = Locker(id=request.POST['id'], location=request.POST['location'], combination=request.POST['combination'], active=request.POST['active'])
-            s.save()
+            if(locker_id != locker.id):
+                d = Locker.objects.get(pk=locker.id)
+                d.delete()
+                s = Locker(id=request.POST['id'], location=request.POST['location'], combination=request.POST['combination'], active=request.POST['active'])
+                s.save()
+            else:
+                s = Locker.objects.get(pk=locker.id)
+                s.location = request.POST['location']
+                s.combination = request.POST['combination']
+                s.active = request.POST['active']
+                s.save()
             return HttpResponseRedirect(reverse('SIS:lockerDetail', args=(request.POST['id'],)))
 def addLockerConfirm(request):
     if(request.POST['id'] == '' or request.POST['location'] == '' or request.POST['combination'] == '' or request.POST['active'] == ''):
