@@ -4,7 +4,9 @@ from . import views
 
 app_name = 'SIS'
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.login, name='login'),
+    path('login', views.loginConfirm, name='loginConfirm'),
+    path('index', views.index, name='index'),
     path('students/', views.studentIndex, name='studentIndex'),
     path('students/list/<int:student_id>/', views.detail, name='detail'),
     path('students/list/<int:student_id>/courses', views.studentCourses, name='studentCourses'),

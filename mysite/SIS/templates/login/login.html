@@ -1,0 +1,12 @@
+<h2>Log in</h2>
+<form action="{% url 'SIS:loginConfirm' %}" method="post">
+    {% csrf_token %}
+    <label for="id">User ID:</label><br>
+    <input type="text" id="id" name="id" value=""><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" value=""><br>
+    <input type="submit" value="Submit">
+</form>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
