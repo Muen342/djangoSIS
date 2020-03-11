@@ -236,9 +236,29 @@ def editCourseConfirm(request, courses_id):
     course.teacher_id = request.POST["teacher"]
     course.save()
 
-    print(request.POST["teacher"])
-    
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
+
+def addCourse(request):
+    teacher_list = Teacher.objects.all()
+    return render(request, 'courses/addCourse.html', {'teacher_list': teacher_list})
+
+def addCourseConfirm(request):
+    if request.POST["code"] == '' or request.POST["title"] == '' or request.POST["credit"] == '' or request.POST["description"] == '':
+        return render(request, 'courses/addCourse.html', {
+                    'error_message': "One of your fields are empty",
+                    })
+    
+    try:
+        t = Teacher.objects.get(pk=request.POST["teacher"])
+    except Teacher.DoesNotExist:
+        return render(request, 'courses/addCourse.html', {
+                    'error_message': "Teacher does not exist",
+                    })
+    
+    course = Courses(id=request.POST["code"], title=request.POST["title"], credit=request.POST["credit"], description=request.POST["description"], teacher_id=request.POST["teacher"])
+    course.save()
+    
+    return HttpResponseRedirect(reverse('SIS:courseDetail', args=(course.id,)))
 
 # Locker views
 def lockerIndex(request):

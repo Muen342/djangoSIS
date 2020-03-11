@@ -1,0 +1,29 @@
+<h2>Add Course</h2>
+
+<form action="{% url 'SIS:addCourseConfirm' %}" method="post">
+    {% csrf_token %}
+    <label for="code" style="padding-right:51px">Code: </label>
+    <input type="text" id="code" name="code" value=""><br>
+    <label for="title" style="padding-right:55px">Title: </label>
+    <input type="text" id="title" name="title" value=""><br>
+    <label for="credit" style="padding-right:45px">Credit: </label>
+    <input type="text" id="credit" name="credit" value=""><br>
+    <label for="description" style="padding-right:10px">Description: </label>
+    <input type="text" id="description" name="description" value=""><br>
+
+    <label for="teacher" style="padding-right:33px">Teacher: </label>
+    <select id="teacher" name="teacher">
+        {% for teacher in teacher_list %}
+            <option value={{teacher.id}}>{{teacher.name}} {{teacher.surname}}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
+
+<br><br>
+<a href="{% url 'SIS:coursesIndex' %}">Back</a>
