@@ -10,6 +10,7 @@ import datetime
 def index(request):
     return render(request, 'homepage/index.html',context=None)
 
+# Student views
 def studentIndex(request):
     student_list = Student.objects.all()
     template = loader.get_template('students/index.html')
@@ -86,6 +87,7 @@ def addStudentConfirm(request):
                 return render(request, 'students/addStudent.html', {
                 'error_message': "The locker doesn't exist, please create one first",
                 })
+
 def studentCourses(request, student_id):
     course_list = Courses.objects.filter(students__contains=str(student_id))
     #course_list = Courses.objects.all()
@@ -104,6 +106,7 @@ def studentCourseDetail(request, student_id, course_id):
     else:
         return render(request, 'students/studentCourseDetail.html', {'student_id':student_id, 'course': course, 'teacher':teacher, 'assignment_list':assignment_list})
                 
+# Course views
 def coursesIndex(request):
     courses_list = Courses.objects.all()
     template = loader.get_template('courses/index.html')
@@ -198,6 +201,42 @@ def viewAttendance(request, courses_id):
         'date_list': date_list,
         })
 
+def editCourse(request, courses_id):
+    try:
+        course = Courses.objects.get(pk=courses_id)
+    except Courses.DoesNotExist:
+        raise Http404("Course does not exist")
+    return render(request, 'courses/editCourse.html', {'course': course})
+
+def editCourseConfirm(request, courses_id):
+    try:
+        course = Courses.objects.get(pk=courses_id)
+    except Courses.DoesNotExist:
+        raise Http404("Course does not exist")
+
+    if request.POST["title"] == '' or request.POST["credit"] == '' or request.POST["description"] == '' or request.POST["teacher_id"] == '':
+        return render(request, 'courses/editCourse.html', {
+                    'error_message': "One of your fields are empty",
+                    'course': course
+                    })
+    
+    try:
+        t = Teacher.objects.get(pk=request.POST["teacher_id"])
+    except Teacher.DoesNotExist:
+        return render(request, 'courses/editCourse.html', {
+                    'error_message': "Teacher does not exist",
+                    'course': course
+                    })
+
+    course.title = request.POST["title"]
+    course.credit = request.POST["credit"]
+    course.description = request.POST["description"]
+    course.teacher_id = request.POST["teacher_id"]
+    course.save()
+    
+    return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
+
+# Locker views
 def lockerIndex(request):
     locker_list = Locker.objects.all()
     template = loader.get_template('Locker/index.html')

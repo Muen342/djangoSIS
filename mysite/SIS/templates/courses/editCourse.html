@@ -1,0 +1,21 @@
+<h2>Edit Course</h2>
+
+<p>{{ course.title }}</p>
+
+<form action="{% url 'SIS:editCourseConfirm' course.id %}" method="post">
+    {% csrf_token %}
+    <label for="title" style="padding-right:55px">Title: </label>
+    <input type="text" id="title" name="title" value={{ course.title }}><br>
+    <label for="credit" style="padding-right:45px">Credit: </label>
+    <input type="text" id="credit" name="credit" value={{ course.credit }}><br>
+    <label for="description" style="padding-right:10px">Description: </label>
+    <input type="text" id="description" name="description" value="{{ course.description }}"><br>
+    <label for="teacher_id" style="padding-right:34px">Teacher: </label>
+    <input type="text" id="teacher_id" name="teacher_id" value={{ course.teacher_id }}><br><br>
+    <input type="submit" value="Submit">
+</form>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
+<br>
+<a href="{% url 'SIS:courseDetail' course.id %}">Back</a>
