@@ -24,4 +24,6 @@ urlpatterns = [
     path('locker/list/', views.listLocker, name='listLocker'),
     path('locker/<int:locker_id>', views.lockerDetail, name='lockerDetail'),
     path('locker/list/<int:locker_id>/edit', views.editLocker, name='editLocker'),
+    path('locker/list/<int:locker_id>/confirmLocker', views.confirmLocker, name='confirmLocker'),
+    path('locker/add/confirm', views.addLockerConfirm, name='addLockerConfirm'),
 ]

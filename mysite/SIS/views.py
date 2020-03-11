@@ -169,12 +169,14 @@ def lockerIndex(request):
     return HttpResponse(template.render(context, request))
 
 def lockerDetail(request, locker_id):
-    template = loader.get_template('Locker/detail.html')
-    return HttpResponse(template.render(request))
+    try:
+        locker = Locker.objects.get(pk=locker_id)
+    except Locker.DoesNotExist:
+        raise Http404("locker does not exist")
+    return render(request, 'Locker/detail.html', {'locker': locker})
 
 def addLocker(request):
-    template = loader.get_template('Locker/addLocker.html')
-    return HttpResponse(template.render(request))
+    return render(request, 'Locker/addLocker.html',context=None)
 
 def listLocker(request):
     locker_list = Locker.objects.all()
@@ -189,16 +191,16 @@ def editLocker(request, locker_id):
         locker = Locker.objects.get(pk=locker_id)
     except Locker.DoesNotExist:
         raise Http404("Locker does not exist")
-    return render(request, 'students/editLocker.html', {'locker': locker})
+    return render(request, 'Locker/editLocker.html', {'locker': locker})
 
 def confirmLocker(request, locker_id):
     try:
         locker = Locker.objects.get(pk=locker_id)
     except Locker.DoesNotExist:
-        raise Http404("Student does not exist")
+        raise Http404("Locker does not exist")
     else:
         if(request.POST['id'] == '' or request.POST['location'] == '' or request.POST['combination'] == '' or request.POST['active'] == ''):
-            return render(request, 'students/editStudent.html', {
+            return render(request, 'Locker/editLocker.html', {
             'locker': locker,
             'error_message': "One of your fields are empty",
             })
@@ -208,3 +210,21 @@ def confirmLocker(request, locker_id):
             s = Locker(id=request.POST['id'], location=request.POST['location'], combination=request.POST['combination'], active=request.POST['active'])
             s.save()
             return HttpResponseRedirect(reverse('SIS:lockerDetail', args=(request.POST['id'],)))
+def addLockerConfirm(request):
+    if(request.POST['id'] == '' or request.POST['location'] == '' or request.POST['combination'] == '' or request.POST['active'] == ''):
+            return render(request, 'Locker/addLocker.html', {
+            'error_message': "One of your fields are empty",
+            })
+    else:
+        try:
+            locker = Locker.objects.get(pk=request.POST['id'])
+            if(locker.id > 0):
+                return render(request, 'Locker/addLocker.html', {
+                'error_message': "This locker id already exists",
+                })
+        except Locker.DoesNotExist:
+            s = Locker(id=request.POST['id'], location=request.POST['location'], combination=request.POST['combination'], active=request.POST['active'])
+            s.save()
+            return render(request, 'Locker/addLocker.html', {
+            'error_message': "Successfully added",
+            })

@@ -1,0 +1,18 @@
+<h2>Add a new Locker</h2>
+<form action="{% url 'SIS:addLockerConfirm' %}" method="post">
+    {% csrf_token %}
+    <label for="id">Locker ID:</label><br>
+    <input type="text" id="id" name="id" value=""><br>
+    <label for="location">Location:</label><br>
+    <input type="text" id="location" name="location" value=""><br>
+    <label for="combination">Combination:</label><br>
+    <input type="text" id="combination" name="combination" value=""><br>
+    <label for="active">Active:</label><br>
+    <input type="text" id="active" name="active" value=""><br><br>
+    <input type="submit" value="Submit">
+</form>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
+<br>
+<a href="{% url 'SIS:lockerIndex' %}">Back</a>
