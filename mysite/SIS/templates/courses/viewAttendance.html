@@ -1,0 +1,25 @@
+<h2>View Attendance</h2>
+
+{% if attendance_list %}
+<table>
+    <tr>
+        <th style="margin-right:10px"></th>
+        {% if date_list %}
+            {% for date in date_list %}
+                <th style="padding-right:10px">{{ date.date }}</th>
+            {% endfor %}
+        {% endif %}
+    </tr>
+    {% for a in attendance_list %}
+        <tr>
+            <td style="padding-right:10px">{{ a.name }}</td>
+            {% for val in a.attendance %}
+                <td>{{ val }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<br><br>
+<a href="{% url 'SIS:courseDetail' course.id %}">Back</a>

@@ -1,5 +1,8 @@
-<h>Course Title</h>
-<p>{{ course.title }}</p>
-<h>Teacher</h>
-<p>{{ course.teacher.name }} {{ course.teacher.surname }}</p>
-<a href="{% url 'SIS:attendance' course.id %}">Edit Attendance</a>
+<p><b>Course Title: </b>{{ course.title }}</p>
+<p><b>Teacher: </b>{{ course.teacher.name }} {{ course.teacher.surname }}</p>
+<br>
+<a href="{% url 'SIS:attendance' course.id %}">Edit Attendance</a><br>
+<a href="{% url 'SIS:viewAttendance' course.id %}">View Attendance</a>
+
+<br><br>
+<a href="{% url 'SIS:listCourses' %}">Back</a>

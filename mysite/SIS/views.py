@@ -136,7 +136,7 @@ def attendance(request, courses_id):
     student_list = []
     for stud in students:
         try:
-            s = Student.objects.get(pk=int(stud))
+            s = Student.objects.get(pk=int(stud[1:-1]))
         except Student.DoesNotExist:
             raise Http404("Student does not exist")
         student_list.append(s)
@@ -152,14 +152,52 @@ def confirmAttendance(request, courses_id):
         raise Http404("Course does not exist")
     students = course.students.split(", ")
     for stud in students:
-        att = Attendance.objects.filter(course_id=courses_id, student_id=stud, date__gte=datetime.date.today())
+        att = Attendance.objects.filter(course_id=courses_id, student_id=stud[1:-1], date__gte=datetime.date.today())
         if att: 
-            if att[0].attendance != request.POST[stud]:
-                att[0].attendance = request.POST[stud]
+            if att[0].attendance != request.POST[stud[1:-1]]:
+                att[0].attendance = request.POST[stud[1:-1]]
+                att[0].save()
         else:
-            a = Attendance(attendance=request.POST[stud], course_id=courses_id, student_id=stud)
+            a = Attendance(attendance=request.POST[stud[1:-1]], course_id=courses_id, student_id=stud[1:-1])
             a.save()
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
+
+def viewAttendance(request, courses_id):
+    try:
+        course = Courses.objects.get(pk=courses_id)
+    except Courses.DoesNotExist:
+        raise Http404("Course does not exist")
+
+    students = course.students.split(", ")
+    att = Attendance.objects.filter(course_id=courses_id)
+    attendance_list = []
+    date_list = []
+    for stud in students:
+        try:
+            s = Student.objects.get(pk=int(stud[1:-1]))
+        except Student.DoesNotExist:
+            raise Http404("Student does not exist")
+        attendance_list.append({'id': s.id, 'name': s.surname + ", " + s.name})
+    
+    if att:
+        date_list = att.values('date').order_by('date').distinct()
+
+    if date_list:
+        for stud in attendance_list:
+            stud['attendance'] = []
+            for d in date_list:
+                p = att.filter(student_id=stud['id'], date=d['date'])
+                if p:
+                    stud['attendance'].append(p[0].attendance)
+                else:
+                    stud['atendance'].append('?')
+
+    return render(request, 'courses/viewAttendance.html', {
+        'course': course,
+        'attendance_list': attendance_list,
+        'date_list': date_list,
+        })
+
 def lockerIndex(request):
     locker_list = Locker.objects.all()
     template = loader.get_template('Locker/index.html')

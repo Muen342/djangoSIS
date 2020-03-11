@@ -1,4 +1,4 @@
-<h1>Courses</h1>
+<h2>Courses</h2>
 
 {% if courses_list %}
 <ul>
@@ -9,3 +9,6 @@
 {% else %}
 <p>No courses created yet.</p>
 {% endif %}
+
+<br><br>
+<a href="{% url 'SIS:coursesIndex' %}">Back</a>

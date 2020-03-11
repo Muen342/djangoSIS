@@ -19,6 +19,7 @@ urlpatterns = [
     path('courses/<int:courses_id>/', views.courseDetail, name='courseDetail'),
     path('courses/<int:courses_id>/attendance', views.attendance, name='attendance'),
     path('courses/<int:courses_id>/attendance/confirm', views.confirmAttendance, name='confirmAttendance'),
+    path('courses/<int:courses_id>/viewAttendance', views.viewAttendance, name='viewAttendance'),
     path('locker/', views.lockerIndex, name='lockerIndex'),
     path('locker/add/', views.addLocker, name='addLocker'),
     path('locker/list/', views.listLocker, name='listLocker'),
