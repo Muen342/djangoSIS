@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from .models import Student, Locker, Teacher, Courses, Assignment, Marks, Attendance
 from django.views import generic
+from django.db import connection
 import datetime
 
 def index(request):
@@ -87,7 +88,7 @@ def addStudentConfirm(request):
                 'error_message': "The locker doesn't exist, please create one first",
                 })
 def studentCourses(request, student_id):
-    course_list = Courses.objects.filter(students__contains=str(student_id))
+    course_list = Courses.objects.filter(students__contains=("*" + str(student_id)) + "*" )
     #course_list = Courses.objects.all()
     return render(request, 'students/studentCourses.html', {'course_list': course_list, 'student_id': student_id})
 
@@ -156,7 +157,10 @@ def confirmAttendance(request, courses_id):
         if att: 
             if att[0].attendance != request.POST[stud[1:-1]]:
                 att[0].attendance = request.POST[stud[1:-1]]
+<<<<<<< HEAD
                 att[0].save()
+=======
+>>>>>>> hotfix
         else:
             a = Attendance(attendance=request.POST[stud[1:-1]], course_id=courses_id, student_id=stud[1:-1])
             a.save()
@@ -266,3 +270,27 @@ def addLockerConfirm(request):
             return render(request, 'Locker/addLocker.html', {
             'error_message': "Successfully added",
             })
+
+def login(request):
+    return render(request, 'login/login.html',context=None)
+def dictfetchall(cursor): 
+    "Returns all rows from a cursor as a dict" 
+    desc = cursor.description 
+    return [
+            dict(zip([col[0] for col in desc], row)) 
+            for row in cursor.fetchall() 
+    ]
+def loginConfirm(request):
+    with connection.cursor() as cursor:
+        cursor.execute("Select type from system_users where user_id = '" + str(request.POST['id']) + "' and user_pw = '" + str(request.POST['password']) + "'")
+        result = dictfetchall(cursor)
+    if(len(result) == 0):
+        return render(request, 'login/login.html', {
+        'error_message': "Login failed",
+        })
+    else:
+        request.session['user_type'] = result[0]['type']
+        request.session['logged_in'] = 1
+        print(request.session['user_type'])
+        return render(request, 'homepage/index.html')
+    
