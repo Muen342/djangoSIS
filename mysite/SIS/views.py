@@ -207,7 +207,8 @@ def editCourse(request, courses_id):
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
         raise Http404("Course does not exist")
-    return render(request, 'courses/editCourse.html', {'course': course})
+    teacher_list = Teacher.objects.all()
+    return render(request, 'courses/editCourse.html', {'course': course, 'teacher_list': teacher_list})
 
 def editCourseConfirm(request, courses_id):
     try:
@@ -215,14 +216,14 @@ def editCourseConfirm(request, courses_id):
     except Courses.DoesNotExist:
         raise Http404("Course does not exist")
 
-    if request.POST["title"] == '' or request.POST["credit"] == '' or request.POST["description"] == '' or request.POST["teacher_id"] == '':
+    if request.POST["title"] == '' or request.POST["credit"] == '' or request.POST["description"] == '':
         return render(request, 'courses/editCourse.html', {
                     'error_message': "One of your fields are empty",
                     'course': course
                     })
     
     try:
-        t = Teacher.objects.get(pk=request.POST["teacher_id"])
+        t = Teacher.objects.get(pk=request.POST["teacher"])
     except Teacher.DoesNotExist:
         return render(request, 'courses/editCourse.html', {
                     'error_message': "Teacher does not exist",
@@ -232,8 +233,10 @@ def editCourseConfirm(request, courses_id):
     course.title = request.POST["title"]
     course.credit = request.POST["credit"]
     course.description = request.POST["description"]
-    course.teacher_id = request.POST["teacher_id"]
+    course.teacher_id = request.POST["teacher"]
     course.save()
+
+    print(request.POST["teacher"])
     
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
 

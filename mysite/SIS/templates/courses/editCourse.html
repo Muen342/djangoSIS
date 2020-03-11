@@ -10,8 +10,18 @@
     <input type="text" id="credit" name="credit" value={{ course.credit }}><br>
     <label for="description" style="padding-right:10px">Description: </label>
     <input type="text" id="description" name="description" value="{{ course.description }}"><br>
-    <label for="teacher_id" style="padding-right:34px">Teacher: </label>
-    <input type="text" id="teacher_id" name="teacher_id" value={{ course.teacher_id }}><br><br>
+
+    <label for="teacher" style="padding-right:33px">Teacher: </label>
+    <select id="teacher" name="teacher" value=course.teacher_id>
+        {% for teacher in teacher_list %}
+            {% if teacher.id == course.teacher_id%}
+                <option value={{teacher.id}} selected>{{teacher.name}} {{teacher.surname}}</option>
+            {% else %}
+                <option value={{teacher.id}}>{{teacher.name}} {{teacher.surname}}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <br><br>
     <input type="submit" value="Submit">
 </form>
 {% if error_message %}
