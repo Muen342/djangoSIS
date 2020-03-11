@@ -157,10 +157,7 @@ def confirmAttendance(request, courses_id):
         if att: 
             if att[0].attendance != request.POST[stud[1:-1]]:
                 att[0].attendance = request.POST[stud[1:-1]]
-<<<<<<< HEAD
                 att[0].save()
-=======
->>>>>>> hotfix
         else:
             a = Attendance(attendance=request.POST[stud[1:-1]], course_id=courses_id, student_id=stud[1:-1])
             a.save()
