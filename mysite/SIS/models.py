@@ -48,7 +48,7 @@ class Attendance(models.Model):
     date = models.DateField(default = datetime.datetime.today)
 
     ATTENDANCE_STATUS = (
-        ('A', 'Attendance'),
+        ('A', 'Absent'),
         ('P', 'Present'),
         ('E', 'Excused'),
     )

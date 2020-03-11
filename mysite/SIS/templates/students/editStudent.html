@@ -6,6 +6,16 @@
     <input type="text" id="id" name="id" value={{ student.id }}><br>
     <label for="grade">Grade:</label><br>
     <input type="text" id="grade" name="grade" value={{ student.grade }}><br>
+    <label for="locker">Locker:</label>
+    <select id="locker" name="locker">
+        <option value={{currlock.id}} selected="selected">{{currlock.id}}</option>
+        {% for locker in locker_list %}
+        {% if locker.id != currlock.id %}
+        <option value={{locker.id}}>{{locker.id}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    <br>
     <label for="lname">First name:</label><br>
     <input type="text" id="fname" name="fname" value={{ student.name }}><br>
     <label for="lname">Last name:</label><br>
