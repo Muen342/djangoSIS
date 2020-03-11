@@ -4,6 +4,8 @@
 
 <form action="{% url 'SIS:editCourseConfirm' course.id %}" method="post">
     {% csrf_token %}
+    <label for="code" style="padding-right:51px">Code: </label>
+    <input type="text" id="code" name="code" value="{{ course.code }}"><br>
     <label for="title" style="padding-right:55px">Title: </label>
     <input type="text" id="title" name="title" value={{ course.title }}><br>
     <label for="credit" style="padding-right:45px">Credit: </label>

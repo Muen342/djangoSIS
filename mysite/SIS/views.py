@@ -216,7 +216,7 @@ def editCourseConfirm(request, courses_id):
     except Courses.DoesNotExist:
         raise Http404("Course does not exist")
 
-    if request.POST["title"] == '' or request.POST["credit"] == '' or request.POST["description"] == '':
+    if request.POST["code"] == '' or request.POST["title"] == '' or request.POST["credit"] == '' or request.POST["description"] == '':
         return render(request, 'courses/editCourse.html', {
                     'error_message': "One of your fields are empty",
                     'course': course
@@ -230,6 +230,7 @@ def editCourseConfirm(request, courses_id):
                     'course': course
                     })
 
+    course.code = request.POST["code"]
     course.title = request.POST["title"]
     course.credit = request.POST["credit"]
     course.description = request.POST["description"]
@@ -255,7 +256,7 @@ def addCourseConfirm(request):
                     'error_message': "Teacher does not exist",
                     })
     
-    course = Courses(id=request.POST["code"], title=request.POST["title"], credit=request.POST["credit"], description=request.POST["description"], teacher_id=request.POST["teacher"])
+    course = Courses(code=request.POST["code"], title=request.POST["title"], credit=request.POST["credit"], description=request.POST["description"], teacher_id=request.POST["teacher"])
     course.save()
     
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(course.id,)))
