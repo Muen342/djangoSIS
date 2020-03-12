@@ -1,3 +1,4 @@
+{%if '*viewcourses*' in permissions%}
 <h2>Courses</h2>
 
 {% if courses_list %}
@@ -11,4 +12,5 @@
 {% endif %}
 
 <br><br>
+{%endif%}
 <a href="{% url 'SIS:coursesIndex' %}">Back</a>

@@ -1,3 +1,4 @@
+{%if '*editstudent*' in permissions%}
 <h2>Edit {{ student.name }} {{ student.surname }}</h2>
 
 <form action="{% url 'SIS:confirmStudent' student.id %}" method="post">
@@ -26,4 +27,5 @@
 <p>{{error_message}}</p>
 {% endif %}
 <br>
+{%endif%}
 <a href="{% url 'SIS:detail' student.id %}">Back</a>

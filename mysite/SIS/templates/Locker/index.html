@@ -1,6 +1,10 @@
 {% load static %}
+{%if '*addlocker*' in permissions%}
 <a href="{% url 'SIS:addLocker' %}">Add new Locker</a>
 <br>
+{%endif%}
+{%if '*viewlocker*' in permissions%}
 <a href="{% url 'SIS:listLocker' %}">Show Lockers</a>
 <br>
+{%endif%}
 <a href="{% url 'SIS:index' %}">Back</a>

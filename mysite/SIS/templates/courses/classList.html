@@ -1,3 +1,4 @@
+{%if '*viewclass*' in permissions%}
 <h2>Class List</h2>
 
 {% if student_list %}
@@ -9,5 +10,6 @@
 {% else %}
 <p>No students in this class yet!</p>
 {% endif %}
+{%endif%}
 <br>
 <a href="{% url 'SIS:courseDetail' course.id %}">Back</a>

@@ -1,3 +1,4 @@
+{%if '*edituser*' in permissions%}
 <h2>Edit {{user.user_id}} Permissions</h2>
 
 Permissions:
@@ -16,4 +17,5 @@ Permissions:
 <p>{{error_message}}</p>
 {% endif %}
 <br>
+{%endif%}
 <a href="{% url 'SIS:userDetail' user.user_id %}">Back</a>

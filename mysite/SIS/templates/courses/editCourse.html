@@ -1,3 +1,4 @@
+{%if '*editcourse*' in permissions%}
 <h2>Edit Course</h2>
 
 <p>{{ course.title }}</p>
@@ -30,4 +31,5 @@
 <p>{{error_message}}</p>
 {% endif %}
 <br>
+{%endif%}
 <a href="{% url 'SIS:courseDetail' course.id %}">Back</a>
