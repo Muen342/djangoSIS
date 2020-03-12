@@ -6,7 +6,6 @@ from django.urls import reverse
 from .models import Student, Locker, Teacher, Courses, Assignment, Marks, Attendance, User, Permissions
 from django.views import generic
 from django.db import connection
-from .forms import PermissionForm
 import datetime
 
 def index(request):
@@ -445,12 +444,5 @@ def userDetail(request, user_id):
     return render(request, 'users/detail.html', {'user': user, 'permissions_list':permissions_list})
 
 def changePermissions(request, user_id):
-    if request.method == 'POST':
-        form = PermissionForm(request.POST)
-        if form.is_valid():
-            permissions = form.cleaned_data.get('permissions')
-            # do something with your results
-    else:
-        form = PermissionForm
 
-    return render('users/changePermissions.html', {'form': form})
+    return render('users/changePermissions.html', {})

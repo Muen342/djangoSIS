@@ -68,6 +68,7 @@ class User(models.Model):
         ('S', 'Student'),
         ('T', 'Teacher'),
         ('M', 'Management'),
+        ('P', 'Parent'),
     )
     user_type = models.CharField(
         max_length=1,
