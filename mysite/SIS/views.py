@@ -166,8 +166,30 @@ def confirmAttendance(request, courses_id):
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
         raise Http404("Course does not exist")
+
     students = course.students.split(", ")
+    student_list = []
     for stud in students:
+        if stud != '':
+            try:
+                s = Student.objects.get(pk=int(stud[1:-1]))
+            except Student.DoesNotExist:
+                raise Http404("Student does not exist")
+            student_list.append(s)
+
+    for stud in students:
+        if request.POST[stud[1:-1]] == '':
+            return render(request, 'courses/attendance.html', {
+                    'error_message': "One of your fields is empty",
+                    'course': course,
+                    'student_list': student_list
+                    })
+        if request.POST[stud[1:-1]] not in ['A', 'E', 'P']:
+            return render(request, 'courses/attendance.html', {
+                    'error_message': "Please only enter valid values",
+                    'course': course,
+                    'student_list': student_list
+                    })
         att = Attendance.objects.filter(course_id=courses_id, student_id=stud[1:-1], date__gte=datetime.date.today())
         if att: 
             if att[0].attendance != request.POST[stud[1:-1]]:
@@ -176,6 +198,7 @@ def confirmAttendance(request, courses_id):
         else:
             a = Attendance(attendance=request.POST[stud[1:-1]], course_id=courses_id, student_id=stud[1:-1])
             a.save()
+
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
 
 def viewAttendance(request, courses_id):
@@ -235,6 +258,11 @@ def editCourseConfirm(request, courses_id):
                     'error_message': "One of your fields are empty",
                     'course': course
                     })
+    if not (request.POST["credit"].replace('.','',1).isdigit()):
+        return render(request, 'courses/editCourse.html', {
+                    'error_message': "The credit value must be a number",
+                    'course': course
+                    })
     
     try:
         t = Teacher.objects.get(pk=request.POST["teacher"])
@@ -262,7 +290,11 @@ def addCourseConfirm(request):
         return render(request, 'courses/addCourse.html', {
                     'error_message': "One of your fields are empty",
                     })
-    
+    if not (request.POST["credit"].replace('.','',1).isdigit()):
+        return render(request, 'courses/addCourse.html', {
+                    'error_message': "The credit value must be a number",
+                    })
+
     try:
         t = Teacher.objects.get(pk=request.POST["teacher"])
     except Teacher.DoesNotExist:

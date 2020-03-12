@@ -21,5 +21,8 @@
 <p>No students are available.</p>
 {% endif %}
 
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
 <br>
 <a href="{% url 'SIS:courseDetail' course.id %}">Back</a>
