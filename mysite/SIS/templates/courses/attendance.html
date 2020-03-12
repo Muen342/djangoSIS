@@ -12,8 +12,8 @@
 <form action="{% url 'SIS:confirmAttendance' course.id %}" method="post">
     {% csrf_token %}
     {% for student in student_list %}
-        <label for="{{ student.id }}">{{ student.name }} {{ student.surname }}</label><br>
-        <input type="text" id="{{ student.id }}" name="{{ student.id }}" value="P"><br>
+    <label for="{{ student.id }}">{{ student.name }} {{ student.surname }}</label><br>
+    <input type="text" id="{{ student.id }}" name="{{ student.id }}" value="P"><br>
     {% endfor %}
     <input type="submit" value="Submit">
 </form>
