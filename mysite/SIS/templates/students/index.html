@@ -3,7 +3,7 @@
 <a href="{% url 'SIS:addStudent' %}">Add new Student</a>
 <br>
 {%endif%}
-{%if '*viewstudent*' in permissions%}
+{%if '*viewstudents*' in permissions%}
 <a href="{% url 'SIS:listStudents' %}">Show students</a>
 <br>
 {%endif%}

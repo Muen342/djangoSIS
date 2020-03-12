@@ -1,5 +1,5 @@
 {% load static %}
-{%if '*viewcourse*' in permissions%}
+{%if '*viewcourses*' in permissions%}
 <a href="{% url 'SIS:listCourses' %}">Show Courses</a><br>
 {%endif%}
 {%if '*addcourse*' in permissions%}

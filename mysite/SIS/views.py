@@ -9,7 +9,8 @@ from django.db import connection
 import datetime
 
 def index(request):
-    return render(request, 'homepage/index.html',context=None)
+    permissions = request.session['user_permissions']
+    return render(request, 'homepage/index.html',{'permissions':permissions})
 
 # Student views
 def studentIndex(request):

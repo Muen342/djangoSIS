@@ -4,7 +4,7 @@
 <a href="{% url 'SIS:coursesIndex' %}"> Courses page</a>
 <br>
 <a href="{% url 'SIS:lockerIndex' %}"> Locker page</a>
-{% if '*superuser*' in permissions %}
+{% if '*viewuser*' in permissions %}
 <br>
 <a href="{% url 'SIS:usersIndex' %}"> Users</a>
 {% endif %}
