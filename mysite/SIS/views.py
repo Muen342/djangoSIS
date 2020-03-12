@@ -9,7 +9,8 @@ from django.db import connection
 import datetime
 
 def index(request):
-    return render(request, 'homepage/index.html',context=None)
+    permissions = request.session['user_permissions']
+    return render(request, 'homepage/index.html',{'permissions':permissions})
 
 # Student views
 def studentIndex(request):
@@ -549,5 +550,5 @@ def confirmPermissions(request, user_id):
             if(index != -1):
                 user.user_permissions = user.user_permissions[:index] + user.user_permissions[index + len(perm):]
     user.save()
-    print(request.session['user_permissions'])
+    request.session['user_permissions'] = user.user_permissions
     return render(request, 'users/changePermissions.html', {'user': user, 'permission_list':permission_list,'permissions':permissions})
