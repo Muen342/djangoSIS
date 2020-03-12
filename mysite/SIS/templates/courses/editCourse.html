@@ -1,3 +1,4 @@
+{%if '*editcourse*' in permissions%}
 <h2>Edit Course</h2>
 
 <p>{{ course.title }}</p>
@@ -16,11 +17,11 @@
     <label for="teacher" style="padding-right:33px">Teacher: </label>
     <select id="teacher" name="teacher">
         {% for teacher in teacher_list %}
-            {% if teacher.id == course.teacher_id%}
-                <option value={{teacher.id}} selected>{{teacher.name}} {{teacher.surname}}</option>
-            {% else %}
-                <option value={{teacher.id}}>{{teacher.name}} {{teacher.surname}}</option>
-            {% endif %}
+        {% if teacher.id == course.teacher_id%}
+        <option value={{teacher.id}} selected>{{teacher.name}} {{teacher.surname}}</option>
+        {% else %}
+        <option value={{teacher.id}}>{{teacher.name}} {{teacher.surname}}</option>
+        {% endif %}
         {% endfor %}
     </select>
     <br><br>
@@ -30,4 +31,5 @@
 <p>{{error_message}}</p>
 {% endif %}
 <br>
+{%endif%}
 <a href="{% url 'SIS:courseDetail' course.id %}">Back</a>

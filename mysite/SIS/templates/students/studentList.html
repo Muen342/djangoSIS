@@ -1,5 +1,5 @@
 {% load static %}
-
+{%if '*viewstudent*' in permissions%}
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 {% if student_list %}
 <ul>
@@ -11,4 +11,5 @@
 <p>No Students are available.</p>
 {% endif %}
 <br>
+{%endif%}
 <a href="{% url 'SIS:studentIndex' %}">Back</a>

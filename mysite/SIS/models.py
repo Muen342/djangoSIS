@@ -78,9 +78,9 @@ class User(models.Model):
         help_text='Type',
     )
     user_permissions = models.TextField(max_length=1000)
-    #pass in permission as *<permission>:<t or f>* (with the * on each end)
+    #pass in permission as *<permission>* (with the * on each end)
     def addPermission(self, permission):
-        if(self.user_permissions.find(permission[1:-2]) != -1):
+        if(self.user_permissions.find(permission) != -1):
             index = self.user_permissions.find(permission[1:-2])
             self.user_permissions = self.user_permissions[:index] + permission[1:-1] + self.user_permissions[index + len(permission) - 2:]
         else:

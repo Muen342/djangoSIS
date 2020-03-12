@@ -1,3 +1,4 @@
+{%if '*addcourse*' in permissions%}
 <h2>Add Course</h2>
 
 <form action="{% url 'SIS:addCourseConfirm' %}" method="post">
@@ -14,7 +15,7 @@
     <label for="teacher" style="padding-right:33px">Teacher: </label>
     <select id="teacher" name="teacher">
         {% for teacher in teacher_list %}
-            <option value={{teacher.id}}>{{teacher.name}} {{teacher.surname}}</option>
+        <option value={{teacher.id}}>{{teacher.name}} {{teacher.surname}}</option>
         {% endfor %}
     </select>
     <br><br>
@@ -26,4 +27,5 @@
 {% endif %}
 
 <br><br>
+{%endif%}
 <a href="{% url 'SIS:coursesIndex' %}">Back</a>

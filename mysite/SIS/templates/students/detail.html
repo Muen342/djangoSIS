@@ -1,3 +1,4 @@
+{%if '*viewstudent*' in permissions%}
 <h>User ID</h>
 <p>{{ student.id }}</p>
 <h>First name</h>
@@ -13,4 +14,5 @@
 <a href="{% url 'SIS:editStudent' student.id %}"> Edit Student</a>
 <br>
 <br>
+{%endif%}
 <a href="{% url 'SIS:listStudents' %}">Back</a>

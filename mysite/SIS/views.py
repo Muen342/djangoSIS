@@ -13,31 +13,37 @@ def index(request):
 
 # Student views
 def studentIndex(request):
+    permissions = request.session['user_permissions']
     student_list = Student.objects.all()
     template = loader.get_template('students/index.html')
     context = {
         'student_list': student_list,
+        'permissions':permissions,
     }
     return HttpResponse(template.render(context, request))
 
 def addStudent(request):
+    permissions = request.session['user_permissions']
     locker_list = Locker.objects.all()
-    return render(request, 'students/addStudent.html',{'locker_list':locker_list})
+    return render(request, 'students/addStudent.html',{'locker_list':locker_list,'permissions':permissions})
 
 def listStudents(request):
+    permissions = request.session['user_permissions']
     student_list = Student.objects.all()
     template = loader.get_template('students/studentList.html')
     context = {
         'student_list': student_list,
+        'permissions':permissions,
     }
     return HttpResponse(template.render(context, request))
 
 def detail(request, student_id):
+    permissions = request.session['user_permissions']
     try:
         student = Student.objects.get(pk=student_id)
     except Student.DoesNotExist:
         raise Http404("Student does not exist")
-    return render(request, 'students/detail.html', {'student': student})
+    return render(request, 'students/detail.html', {'student': student,'permissions':permissions})
 
 def editStudent(request, student_id):
     locker_list = Locker.objects.all()
@@ -46,9 +52,10 @@ def editStudent(request, student_id):
         currlock = Locker.objects.get(pk=student.locker_id)
     except Student.DoesNotExist:
         raise Http404("Student does not exist")
-    return render(request, 'students/editStudent.html', {'student': student, 'currlock': currlock,'locker_list': locker_list})
+    return render(request, 'students/editStudent.html', {'student': student, 'currlock': currlock,'locker_list': locker_list,'permissions':permissions})
 
 def confirmStudent(request, student_id):
+    permissions = request.session['user_permissions']
     try:
         student = Student.objects.get(pk=student_id)
     except Student.DoesNotExist:
@@ -57,6 +64,7 @@ def confirmStudent(request, student_id):
         if(request.POST['id'] == '' or request.POST['fname'] == '' or request.POST['lname'] == '' or request.POST['grade'] == ''):
             return render(request, 'students/editStudent.html', {
             'student': student,
+            'permissions':permissions,
             'error_message': "One of your fields are empty",
             })
         else:
@@ -75,9 +83,10 @@ def confirmStudent(request, student_id):
             return HttpResponseRedirect(reverse('SIS:detail', args=(request.POST['id'],)))
 
 def addStudentConfirm(request):
+    permissions = request.session['user_permissions']
     if(request.POST['id'] == '' or request.POST['fname'] == '' or request.POST['lname'] == '' or request.POST['grade'] == ''):
             return render(request, 'students/addStudent.html', {
-            'error_message': "One of your fields are empty",
+            'error_message': "One of your fields are empty",'permissions':permissions
             })
     else:
         try:
@@ -94,6 +103,7 @@ def addStudentConfirm(request):
                     s.save()
                     return render(request, 'students/addStudent.html', {
                     'error_message': "Successfully added",
+                    'permissions':permissions
                     })
             except Locker.DoesNotExist:
                 return render(request, 'students/addStudent.html', {
@@ -101,11 +111,13 @@ def addStudentConfirm(request):
                 })
 
 def studentCourses(request, student_id):
+    permissions = request.session['user_permissions']
     course_list = Courses.objects.filter(students__contains=("*" + str(student_id)) + "*" )
     #course_list = Courses.objects.all()
-    return render(request, 'students/studentCourses.html', {'course_list': course_list, 'student_id': student_id})
+    return render(request, 'students/studentCourses.html', {'course_list': course_list, 'student_id': student_id,'permissions':permissions})
 
 def studentCourseDetail(request, student_id, course_id):
+    permissions = request.session['user_permissions']
     try:
         course = Courses.objects.get(pk=course_id)
         teacher = Teacher.objects.get(pk=course.teacher_id)
@@ -116,33 +128,39 @@ def studentCourseDetail(request, student_id, course_id):
     except Student.DoesNotExist:
         raise Http404("Course does not exist")
     else:
-        return render(request, 'students/studentCourseDetail.html', {'student_id':student_id, 'course': course, 'teacher':teacher, 'assignment_list':assignment_list})
+        return render(request, 'students/studentCourseDetail.html', {'student_id':student_id, 'course': course, 'teacher':teacher, 'assignment_list':assignment_list,'permissions':permissions})
                 
 # Course views
 def coursesIndex(request):
+    permissions = request.session['user_permissions']
     courses_list = Courses.objects.all()
     template = loader.get_template('courses/index.html')
     context = {
         'courses_list': courses_list,
+        'permissions':permissions,
     }
     return HttpResponse(template.render(context, request))
 
 def listCourses(request):
+    permissions = request.session['user_permissions']
     courses_list = Courses.objects.all()
     template = loader.get_template('courses/listCourses.html')
     context = {
         'courses_list': courses_list,
+        'permissions':permissions,
     }
     return HttpResponse(template.render(context, request))
 
 def courseDetail(request, courses_id):
+    permissions = request.session['user_permissions']
     try:
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
         raise Http404("Course does not exist")
-    return render(request, 'courses/courseDetail.html', {'course': course})
+    return render(request, 'courses/courseDetail.html', {'course': course,'permissions':permissions})
 
 def attendance(request, courses_id):
+    permissions = request.session['user_permissions']
     try:
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
@@ -159,9 +177,11 @@ def attendance(request, courses_id):
     return render(request, 'courses/attendance.html', {
         'course': course,
         'student_list': student_list,
+        'permissions':permissions,
     })
 
 def confirmAttendance(request, courses_id):
+    permissions = request.session['user_permissions']
     try:
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
@@ -179,6 +199,7 @@ def confirmAttendance(request, courses_id):
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
 
 def viewAttendance(request, courses_id):
+    permissions = request.session['user_permissions']
     try:
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
@@ -213,16 +234,18 @@ def viewAttendance(request, courses_id):
     return render(request, 'courses/viewAttendance.html', {
         'course': course,
         'attendance_list': attendance_list,
+        'permissions':permissions,
         'date_list': date_list,
         })
 
 def editCourse(request, courses_id):
+    permissions = request.session['user_permissions']
     try:
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
         raise Http404("Course does not exist")
     teacher_list = Teacher.objects.all()
-    return render(request, 'courses/editCourse.html', {'course': course, 'teacher_list': teacher_list})
+    return render(request, 'courses/editCourse.html', {'course': course, 'teacher_list': teacher_list,'permissions':permissions})
 
 def editCourseConfirm(request, courses_id):
     try:
@@ -254,13 +277,16 @@ def editCourseConfirm(request, courses_id):
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(courses_id,)))
 
 def addCourse(request):
+    permissions = request.session['user_permissions']
     teacher_list = Teacher.objects.all()
-    return render(request, 'courses/addCourse.html', {'teacher_list': teacher_list})
+    return render(request, 'courses/addCourse.html', {'teacher_list': teacher_list,'permissions':permissions})
 
 def addCourseConfirm(request):
+    permissions = request.session['user_permissions']
     if request.POST["code"] == '' or request.POST["title"] == '' or request.POST["credit"] == '' or request.POST["description"] == '':
         return render(request, 'courses/addCourse.html', {
                     'error_message': "One of your fields are empty",
+                    'permissions':permissions,
                     })
     
     try:
@@ -268,6 +294,7 @@ def addCourseConfirm(request):
     except Teacher.DoesNotExist:
         return render(request, 'courses/addCourse.html', {
                     'error_message': "Teacher does not exist",
+                    'permissions':permissions,
                     })
     
     course = Courses(code=request.POST["code"], title=request.POST["title"], credit=request.POST["credit"], description=request.POST["description"], teacher_id=request.POST["teacher"])
@@ -276,6 +303,7 @@ def addCourseConfirm(request):
     return HttpResponseRedirect(reverse('SIS:courseDetail', args=(course.id,)))
 
 def classList(request, courses_id):
+    permissions = request.session['user_permissions']
     try:
         course = Courses.objects.get(pk=courses_id)
     except Courses.DoesNotExist:
@@ -291,44 +319,53 @@ def classList(request, courses_id):
             student_list.append(s)
     return render(request, 'courses/classList.html', {
         'course': course,
+        'permissions':permissions,
         'student_list': student_list,
     })
 
 # Locker views
 def lockerIndex(request):
+    permissions = request.session['user_permissions']
     locker_list = Locker.objects.all()
     template = loader.get_template('Locker/index.html')
     context = {
         'locker_list': locker_list,
+        'permissions':permissions,
     }
     return HttpResponse(template.render(context, request))
 
 def lockerDetail(request, locker_id):
+    permissions = request.session['user_permissions']
     try:
         locker = Locker.objects.get(pk=locker_id)
     except Locker.DoesNotExist:
         raise Http404("locker does not exist")
-    return render(request, 'Locker/detail.html', {'locker': locker})
+    return render(request, 'Locker/detail.html', {'locker': locker,'permissions':permissions})
 
 def addLocker(request):
-    return render(request, 'Locker/addLocker.html',context=None)
+    permissions = request.session['user_permissions']
+    return render(request, 'Locker/addLocker.html',{'permissions':permissions})
 
 def listLocker(request):
+    permissions = request.session['user_permissions']
     locker_list = Locker.objects.all()
     template = loader.get_template('Locker/lockerList.html')
     context = {
         'locker_list': locker_list,
+        'permissions':permissions,
     }
     return HttpResponse(template.render(context, request))
 
 def editLocker(request, locker_id):
+    permissions = request.session['user_permissions']
     try:
         locker = Locker.objects.get(pk=locker_id)
     except Locker.DoesNotExist:
         raise Http404("Locker does not exist")
-    return render(request, 'Locker/editLocker.html', {'locker': locker})
+    return render(request, 'Locker/editLocker.html', {'locker': locker,'permissions':permissions})
 
 def confirmLocker(request, locker_id):
+    permissions = request.session['user_permissions']
     try:
         locker = Locker.objects.get(pk=locker_id)
     except Locker.DoesNotExist:
@@ -353,9 +390,11 @@ def confirmLocker(request, locker_id):
                 s.save()
             return HttpResponseRedirect(reverse('SIS:lockerDetail', args=(request.POST['id'],)))
 def addLockerConfirm(request):
+    permissions = request.session['user_permissions']
     if(request.POST['id'] == '' or request.POST['location'] == '' or request.POST['combination'] == '' or request.POST['active'] == ''):
             return render(request, 'Locker/addLocker.html', {
             'error_message': "One of your fields are empty",
+            'permissions':permissions,
             })
     else:
         try:
@@ -369,6 +408,7 @@ def addLockerConfirm(request):
             s.save()
             return render(request, 'Locker/addLocker.html', {
             'error_message': "Successfully added",
+            'permissions':permissions,
             })
 
 def login(request):
@@ -399,26 +439,32 @@ def loginConfirm(request):
         })
 
 def usersIndex(request):
-    return render(request, 'users/index.html',context=None)
+    permissions = request.session['user_permissions']
+    return render(request, 'users/index.html',{'permissions':permissions})
 
 def addUser(request):
+    permissions = request.session['user_permissions']
     type_list = []
     for i in User.TYPES:
         type_list.append(i[0])
-    return render(request, 'users/addUser.html',{'type_list':type_list})
+    return render(request, 'users/addUser.html',{'type_list':type_list,'permissions':permissions})
 
 def listUsers(request):
+    permissions = request.session['user_permissions']
     user_list = User.objects.all()
     template = loader.get_template('users/listUser.html')
     context = {
         'user_list': user_list,
+        'permissions':permissions,
     }
     return HttpResponse(template.render(context, request))
 
 def addUserConfirm(request):
+    permissions = request.session['user_permissions']
     if(request.POST['id'] == '' or request.POST['password'] == '' or request.POST['type'] == ''):
             return render(request, 'users/addUser.html', {
             'error_message': "One of your fields are empty",
+            'permissions':permissions,
             })
     else:
         try:
@@ -426,23 +472,50 @@ def addUserConfirm(request):
             if(len(user.user_id) > 0):
                 return render(request, 'users/addUser.html', {
                 'error_message': "This locker id already exists",
+                'permissions':permissions,
                 })
         except User.DoesNotExist:
             s = User(user_id=request.POST['id'], user_pw=request.POST['password'], user_type=request.POST['type'], user_permissions = '')
             s.save()
             return render(request, 'users/addUser.html', {
             'error_message': "Successfully added",
+            'permissions':permissions,
             })
 
 def userDetail(request, user_id):
+    permissions = request.session['user_permissions']
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
         raise Http404("user does not exist")
     permissions = user.user_permissions[1:-1]
     permissions_list = permissions.split("**")
-    return render(request, 'users/detail.html', {'user': user, 'permissions_list':permissions_list})
+    return render(request, 'users/detail.html', {'user': user, 'permissions_list':permissions_list,'permissions':permissions})
 
 def changePermissions(request, user_id):
+    permissions = request.session['user_permissions']
+    listarr = Permissions.objects.all()
+    listarr2 = listarr[0].permissions_list[1:-1]
+    permission_list = listarr2.split("**")
+    user = User.objects.get(pk=user_id)
+    return render(request, 'users/changePermissions.html', {'user': user, 'permission_list':permission_list,'permissions':permissions})
 
-    return render('users/changePermissions.html', {})
+def confirmPermissions(request, user_id):
+    permissions = request.session['user_permissions']
+    user = User.objects.get(pk=user_id)
+    listarr = Permissions.objects.all()
+    listarr2 = listarr[0].permissions_list[1:-1]
+    permission_list = listarr2.split("**")
+    for i in permission_list:
+        try:
+            if(request.POST[i]):
+                if(user.user_permissions.find(i) == -1):
+                    user.user_permissions = user.user_permissions + "*" + i + "*"
+        except:
+            perm = '*' + i + '*'
+            index = user.user_permissions.find(perm)
+            if(index != -1):
+                user.user_permissions = user.user_permissions[:index] + user.user_permissions[index + len(perm):]
+    user.save()
+    print(request.session['user_permissions'])
+    return render(request, 'users/changePermissions.html', {'user': user, 'permission_list':permission_list,'permissions':permissions})

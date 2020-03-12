@@ -1,5 +1,21 @@
-<form method='post'>
+{%if '*edituser*' in permissions%}
+<h2>Edit {{user.user_id}} Permissions</h2>
+
+Permissions:
+<form action="{% url 'SIS:confirmPermissions' user.user_id %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type='submit' value='submit'>
+    {% for permission in permission_list %}
+    {% if permission in user.user_permissions %}
+    <input type="checkbox" name={{permission}} value={{permission}} checked>{{permission}}<br>
+    {% else %}
+    <input type="checkbox" name={{permission}} value={{permission}}>{{permission}}<br>
+    {%endif%}
+    {%endfor%}
+    <input type="submit" value="Submit">
 </form>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
+<br>
+{%endif%}
+<a href="{% url 'SIS:userDetail' user.user_id %}">Back</a>

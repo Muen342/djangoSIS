@@ -1,3 +1,4 @@
+{%if '*editcourse*' in permissions%}
 <h2>Attendance</h2>
 
 <p>
@@ -12,14 +13,14 @@
 <form action="{% url 'SIS:confirmAttendance' course.id %}" method="post">
     {% csrf_token %}
     {% for student in student_list %}
-        <label for="{{ student.id }}">{{ student.name }} {{ student.surname }}</label><br>
-        <input type="text" id="{{ student.id }}" name="{{ student.id }}" value="P"><br>
+    <label for="{{ student.id }}">{{ student.name }} {{ student.surname }}</label><br>
+    <input type="text" id="{{ student.id }}" name="{{ student.id }}" value="P"><br>
     {% endfor %}
     <input type="submit" value="Submit">
 </form>
 {% else %}
 <p>No students are available.</p>
 {% endif %}
-
+{%endif%}
 <br>
 <a href="{% url 'SIS:courseDetail' course.id %}">Back</a>

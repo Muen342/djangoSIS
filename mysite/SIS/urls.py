@@ -40,4 +40,5 @@ urlpatterns = [
     path('users/add/confirm', views.addUserConfirm, name='addUserConfirm'),
     path('users/<user_id>', views.userDetail, name='userDetail'),
     path('users/<user_id>/permissions', views.changePermissions, name='changePermissions'),
+    path('users/<user_id>/permissions/confirm', views.confirmPermissions, name='confirmPermissions'),
 ]
