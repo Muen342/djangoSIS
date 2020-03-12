@@ -517,14 +517,14 @@ def addUserConfirm(request):
             })
 
 def userDetail(request, user_id):
-    permissions = request.session['user_permissions']
+    permission = request.session['user_permissions']
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
         raise Http404("user does not exist")
     permissions = user.user_permissions[1:-1]
     permissions_list = permissions.split("**")
-    return render(request, 'users/detail.html', {'user': user, 'permissions_list':permissions_list,'permissions':permissions})
+    return render(request, 'users/detail.html', {'user': user, 'permissions_list':permissions_list,'permissions':permission})
 
 def changePermissions(request, user_id):
     permissions = request.session['user_permissions']
@@ -535,7 +535,6 @@ def changePermissions(request, user_id):
     return render(request, 'users/changePermissions.html', {'user': user, 'permission_list':permission_list,'permissions':permissions})
 
 def confirmPermissions(request, user_id):
-    permissions = request.session['user_permissions']
     user = User.objects.get(pk=user_id)
     listarr = Permissions.objects.all()
     listarr2 = listarr[0].permissions_list[1:-1]
@@ -551,5 +550,7 @@ def confirmPermissions(request, user_id):
             if(index != -1):
                 user.user_permissions = user.user_permissions[:index] + user.user_permissions[index + len(perm):]
     user.save()
-    request.session['user_permissions'] = user.user_permissions
+    if(user_id == request.session['user_id']):
+        request.session['user_permissions'] = user.user_permissions
+    permissions = request.session['user_permissions']
     return render(request, 'users/changePermissions.html', {'user': user, 'permission_list':permission_list,'permissions':permissions})
