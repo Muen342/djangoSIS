@@ -554,3 +554,12 @@ def confirmPermissions(request, user_id):
         request.session['user_permissions'] = user.user_permissions
     permissions = request.session['user_permissions']
     return render(request, 'users/changePermissions.html', {'user': user, 'permission_list':permission_list,'permissions':permissions})
+
+def logout(request):
+    try:
+        del request.session['user_id']
+        del request.session['user_permissions']
+        del request.session['user_type']
+    except:
+        pass
+    return render(request, 'login/login.html', {})
