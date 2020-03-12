@@ -1,4 +1,3 @@
-{%if '*viewcourse*' in permissions%}
 <b>Course Title: </b>{{ course.title }}<br>
 <b>Course Code: </b>{{ course.code }}<br>
 <b>Teacher: </b>{{ course.teacher.name }} {{ course.teacher.surname }}<br>
@@ -14,5 +13,4 @@
 <a href="{% url 'SIS:editCourse' course.id %}">Edit Course</a>
 
 <br><br>
-{%endif%}
 <a href="{% url 'SIS:listCourses' %}">Back</a>

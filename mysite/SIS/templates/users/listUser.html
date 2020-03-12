@@ -1,5 +1,5 @@
 {% load static %}
-{%if '*viewuser*' in permissions%}
+
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 {% if user_list %}
 <ul>
@@ -11,5 +11,4 @@
 <p>No Users are available.</p>
 {% endif %}
 <br>
-{%endif%}
 <a href="{% url 'SIS:usersIndex' %}">Back</a>

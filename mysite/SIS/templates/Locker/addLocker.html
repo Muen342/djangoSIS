@@ -1,4 +1,3 @@
-{%if '*addlocker*' in permissions%}
 <h2>Add a new Locker</h2>
 <form action="{% url 'SIS:addLockerConfirm' %}" method="post">
     {% csrf_token %}
@@ -16,5 +15,4 @@
 <p>{{error_message}}</p>
 {% endif %}
 <br>
-{%endif%}
 <a href="{% url 'SIS:lockerIndex' %}">Back</a>

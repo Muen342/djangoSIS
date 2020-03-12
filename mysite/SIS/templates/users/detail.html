@@ -1,4 +1,3 @@
-{%if '*viewuser*' in permissions%}
 <h>User ID</h>
 <p>{{ user.user_id }}</p>
 <h>User type</h>
@@ -10,5 +9,4 @@
 <a href="{% url 'SIS:changePermissions' user.user_id %}"> Change Permissions</a>
 <br>
 <br>
-{%endif%}
 <a href="{% url 'SIS:listUsers' %}">Back</a>

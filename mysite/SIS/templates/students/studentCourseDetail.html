@@ -1,4 +1,3 @@
-{%if '*viewstudent*' in permissions%}
 <h>Title: {{course.title}}</h>
 <br>
 <p>Instructor: {{ teacher.name }} {{ teacher.surname }}</p>
@@ -16,6 +15,5 @@
 {% else %}
 <p>No Assignments are available.</p>
 {% endif %}
-{%endif%}
 <br>
 <a href="{% url 'SIS:studentCourses' student_id %}">Back</a>

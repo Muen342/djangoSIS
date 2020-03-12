@@ -1,4 +1,3 @@
-{%if '*editlocker*' in permissions%}
 <h2>Edit locker id {{locker.id}}</h2>
 
 <form action="{% url 'SIS:confirmLocker' locker.id %}" method="post">
@@ -17,5 +16,4 @@
 <p>{{error_message}}</p>
 {% endif %}
 <br>
-{%endif%}
 <a href="{% url 'SIS:lockerDetail' locker.id %}">Back</a>

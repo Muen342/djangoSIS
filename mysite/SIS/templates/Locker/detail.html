@@ -1,4 +1,3 @@
-{%if '*viewlocker*' in permissions%}
 <h>Locker ID</h>
 <p>{{ locker.id }}</p>
 <h>Location</h>
@@ -10,5 +9,4 @@
 <a href="{% url 'SIS:editLocker' locker.id %}"> Edit Locker</a>
 <br>
 <br>
-{%endif%}
 <a href="{% url 'SIS:listLocker' %}">Back</a>

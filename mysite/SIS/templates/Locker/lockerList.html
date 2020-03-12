@@ -1,5 +1,5 @@
 {% load static %}
-{%if '*viewlocker*' in permissions%}
+
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 {% if locker_list %}
 <ul>
@@ -11,5 +11,4 @@
 <p>No Lockers are available.</p>
 {% endif %}
 <br>
-{%endif%}
 <a href="{% url 'SIS:lockerIndex' %}">Back</a>
