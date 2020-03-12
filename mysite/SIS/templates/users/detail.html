@@ -1,0 +1,12 @@
+<h>User ID</h>
+<p>{{ user.user_id }}</p>
+<h>User type</h>
+<p>{{ user.user_type }}</p>
+<h>Permissions:</h>
+{%for permission in permissions_list%}
+<p>{{ permission }}</p>
+{%endfor%}
+<a href="{% url 'SIS:changePermissions' user.user_id %}"> Change Permissions</a>
+<br>
+<br>
+<a href="{% url 'SIS:listUsers' %}">Back</a>

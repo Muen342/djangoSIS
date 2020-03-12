@@ -34,4 +34,10 @@ urlpatterns = [
     path('locker/list/<int:locker_id>/edit', views.editLocker, name='editLocker'),
     path('locker/list/<int:locker_id>/confirmLocker', views.confirmLocker, name='confirmLocker'),
     path('locker/add/confirm', views.addLockerConfirm, name='addLockerConfirm'),
+    path('users/', views.usersIndex, name='usersIndex'),
+    path('users/add', views.addUser, name='addUser'),
+    path('users/list', views.listUsers, name='listUsers'),
+    path('users/add/confirm', views.addUserConfirm, name='addUserConfirm'),
+    path('users/<user_id>', views.userDetail, name='userDetail'),
+    path('users/<user_id>/permissions', views.changePermissions, name='changePermissions'),
 ]

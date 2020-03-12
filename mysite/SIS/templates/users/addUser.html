@@ -1,0 +1,20 @@
+<h2>Add a new User</h2>
+<form action="{% url 'SIS:addUserConfirm' %}" method="post">
+    {% csrf_token %}
+    <label for="id">User ID:</label><br>
+    <input type="text" id="id" name="id" value=""><br>
+    <label for="password">Password:</label><br>
+    <input type="text" id="password" name="password" value=""><br>
+    <label for="type">Type:</label>
+    <select id="type" name="type">
+        {% for type in type_list %}
+        <option value={{type}}>{{type}}</option>
+        {% endfor %}
+    </select><br><br>
+    <input type="submit" value="Submit">
+</form>
+{% if error_message %}
+<p>{{error_message}}</p>
+{% endif %}
+<br>
+<a href="{% url 'SIS:usersIndex' %}">Back</a>

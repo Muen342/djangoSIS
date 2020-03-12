@@ -60,3 +60,32 @@ class Attendance(models.Model):
         default='P',
         help_text='Attendance',
     )
+
+class User(models.Model):
+    user_id = models.CharField(primary_key=True, max_length=20)
+    user_pw = models.CharField(max_length=50)
+    TYPES = (
+        ('S', 'Student'),
+        ('T', 'Teacher'),
+        ('M', 'Management'),
+    )
+    user_type = models.CharField(
+        max_length=1,
+        choices=TYPES,
+        blank=True,
+        default='S',
+        help_text='Type',
+    )
+    user_permissions = models.TextField(max_length=1000)
+    #pass in permission as *<permission>:<t or f>* (with the * on each end)
+    def addPermission(self, permission):
+        if(self.user_permissions.find(permission[1:-2]) != -1):
+            index = self.user_permissions.find(permission[1:-2])
+            self.user_permissions = self.user_permissions[:index] + permission[1:-1] + self.user_permissions[index + len(permission) - 2:]
+        else:
+            self.user_permissions = self.user_permissions + permission
+    def deletePermission(self, permission):
+        self.user_permissions.replace(permission, '')
+
+class Permissions(models.Model):
+    permissions_list = models.TextField(max_length=3000)

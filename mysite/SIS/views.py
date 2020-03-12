@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from django.template import loader
+from django.template import loader, RequestContext
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from .models import Student, Locker, Teacher, Courses, Assignment, Marks, Attendance
+from .models import Student, Locker, Teacher, Courses, Assignment, Marks, Attendance, User, Permissions
 from django.views import generic
 from django.db import connection
+from .forms import PermissionForm
 import datetime
 
 def index(request):
@@ -381,16 +382,75 @@ def dictfetchall(cursor):
             for row in cursor.fetchall() 
     ]
 def loginConfirm(request):
-    with connection.cursor() as cursor:
-        cursor.execute("Select type from system_users where user_id = '" + str(request.POST['id']) + "' and user_pw = '" + str(request.POST['password']) + "'")
-        result = dictfetchall(cursor)
-    if(len(result) == 0):
+    try:
+        user = User.objects.get(pk=request.POST['id'])
+    except:
         return render(request, 'login/login.html', {
-        'error_message': "Login failed",
+        'error_message': "User ID not found",
         })
+    if(user.user_pw == request.POST['password']):
+        request.session['user_id'] = user.user_id
+        request.session['user_type'] = user.user_type
+        request.session['user_permissions'] = user.user_permissions
+        return render(request, 'homepage/index.html', {'permissions':user.user_permissions})
+        
     else:
-        request.session['user_type'] = result[0]['type']
-        request.session['logged_in'] = 1
-        print(request.session['user_type'])
-        return render(request, 'homepage/index.html')
-    
+        return render(request, 'login/login.html', {
+        'error_message': "Incorrect Password",
+        })
+
+def usersIndex(request):
+    return render(request, 'users/index.html',context=None)
+
+def addUser(request):
+    type_list = []
+    for i in User.TYPES:
+        type_list.append(i[0])
+    return render(request, 'users/addUser.html',{'type_list':type_list})
+
+def listUsers(request):
+    user_list = User.objects.all()
+    template = loader.get_template('users/listUser.html')
+    context = {
+        'user_list': user_list,
+    }
+    return HttpResponse(template.render(context, request))
+
+def addUserConfirm(request):
+    if(request.POST['id'] == '' or request.POST['password'] == '' or request.POST['type'] == ''):
+            return render(request, 'users/addUser.html', {
+            'error_message': "One of your fields are empty",
+            })
+    else:
+        try:
+            user = User.objects.get(pk=request.POST['id'])
+            if(len(user.user_id) > 0):
+                return render(request, 'users/addUser.html', {
+                'error_message': "This locker id already exists",
+                })
+        except User.DoesNotExist:
+            s = User(user_id=request.POST['id'], user_pw=request.POST['password'], user_type=request.POST['type'], user_permissions = '')
+            s.save()
+            return render(request, 'users/addUser.html', {
+            'error_message': "Successfully added",
+            })
+
+def userDetail(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        raise Http404("user does not exist")
+    permissions = user.user_permissions[1:-1]
+    permissions_list = permissions.split("**")
+    return render(request, 'users/detail.html', {'user': user, 'permissions_list':permissions_list})
+
+def changePermissions(request, user_id):
+    if request.method == 'POST':
+        form = PermissionForm(request.POST)
+        if form.is_valid():
+            permissions = form.cleaned_data.get('permissions')
+            # do something with your results
+    else:
+        form = PermissionForm
+
+    return render('users/changePermissions.html', {'form': form})

@@ -1,0 +1,14 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% if user_list %}
+<ul>
+    {% for user in user_list %}
+    <li><a href="{% url 'SIS:userDetail' user.user_id %}">id: {{ user.user_id }} type: {{ user.user_type }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No Users are available.</p>
+{% endif %}
+<br>
+<a href="{% url 'SIS:usersIndex' %}">Back</a>
