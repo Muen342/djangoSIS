@@ -47,6 +47,7 @@ def detail(request, student_id):
     return render(request, 'students/detail.html', {'student': student,'permissions':permissions})
 
 def editStudent(request, student_id):
+    permissions = request.session['user_permissions']
     locker_list = Locker.objects.all()
     try:
         student = Student.objects.get(pk=student_id)

@@ -80,7 +80,7 @@ DATABASES = {
         'HOST': '/tmp/mysql.sock',
         'USER': 'root',
         'PASSWORD': 'bronte',
-        'NAME': 'mydb',
+        'NAME': 'bronte_db',
     }
 }
 
